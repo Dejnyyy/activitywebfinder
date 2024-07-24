@@ -2,6 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "~/utils/api";
+import Sidebar from './components/sidebar';
+
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -14,22 +16,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="w-16 fixed h-full left-0 bg-white shadow-md">
-          <div>
-            <Image
-              className="mx-auto"
-              src="/favicon.ico"
-              alt="Logo"
-              width={50}
-              height={50}
-            />
-          </div>
-        </div>
+      <Sidebar />
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Activi<span className="text-[hsl(280,100%,70%)]">ty</span> Finder
           </h1>
-          
         </div>
       </main>
     </>
