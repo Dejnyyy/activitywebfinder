@@ -1,4 +1,3 @@
-// components/Sidebar.tsx
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { CgAddR } from "react-icons/cg";
@@ -8,7 +7,10 @@ import { FaHome } from "react-icons/fa";
 import dynamic from 'next/dynamic';
 
 // Dynamically import MapComponent to avoid SSR issues
-const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
+const MapComponent = dynamic(() => import('./MapComponent'), {
+  ssr: false,
+  loading: () => <p>Loading map...</p>
+});
 
 const Sidebar: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
