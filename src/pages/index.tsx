@@ -17,7 +17,7 @@ export default function Home() {
         <div className="w-full fixed h-16 top-0 bg-white shadow-md">
           <div>
             <Image
-            className="ml-4 my-2"
+              className="ml-4 my-2"
               src="/favicon.ico"
               alt="Logo"
               width={50}
@@ -27,7 +27,7 @@ export default function Home() {
         </div>
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
+            Activi<span className="text-[hsl(280,100%,70%)]">ty</span> Finder
           </h1>
           
         </div>
