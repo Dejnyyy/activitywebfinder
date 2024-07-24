@@ -14,10 +14,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="w-full fixed h-16 top-0 bg-white shadow-md">
+        <div className="w-16 fixed h-full left-0 bg-white shadow-md">
           <div>
             <Image
-              className="ml-4 my-2"
+              className="mx-auto"
               src="/favicon.ico"
               alt="Logo"
               width={50}
