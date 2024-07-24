@@ -1,16 +1,10 @@
-import { GeistSans } from "geist/font/sans";
-import { type AppType } from "next/app";
+// pages/_app.tsx
+import 'leaflet/dist/leaflet.css';
+import '../styles/globals.css'; // Adjust according to your project
+import type { AppProps } from 'next/app';
 
-import { api } from "~/utils/api";
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
 
-import "~/styles/globals.css";
-
-const MyApp: AppType = ({ Component, pageProps }) => {
-  return (
-    <div className={GeistSans.className}>
-      <Component {...pageProps} />
-    </div>
-  );
-};
-
-export default api.withTRPC(MyApp);
+export default MyApp;
