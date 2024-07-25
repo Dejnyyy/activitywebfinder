@@ -5,14 +5,14 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { latitude, longitude, text } = req.body;
+    const { latitude, longitude, text, color } = req.body;
 
-    if (latitude === undefined || longitude === undefined || text === undefined) {
-      return res.status(400).json({ error: 'Latitude, longitude, and text are required' });
+    if (latitude === undefined || longitude === undefined || text === undefined || color === undefined) {
+      return res.status(400).json({ error: 'Latitude, longitude, text, and color are required' });
     }
 
     const waypoint = await prisma.waypoint.create({
-      data: { latitude, longitude, text },
+      data: { latitude, longitude, text, color },
     });
 
     res.status(201).json(waypoint);

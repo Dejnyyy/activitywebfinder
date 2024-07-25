@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { redIcon, blueIcon, greenIcon } from './CustomIcons';
 
 // Fix for the default icon issue
 L.Icon.Default.mergeOptions({
@@ -14,6 +15,7 @@ interface Waypoint {
   id?: number;
   position: L.LatLng;
   text: string;
+  color: string;
 }
 
 interface MapComponentProps {
@@ -35,6 +37,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
           id: waypoint.id,
           position: new L.LatLng(waypoint.latitude, waypoint.longitude),
           text: waypoint.text,
+          color: waypoint.color,
         })));
       } catch (error) {
         console.error('Failed to fetch waypoints:', error);
@@ -48,7 +51,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
     useMapEvents({
       click(e) {
         if (addWaypointMode) {
-          const newWaypoint = { position: e.latlng, text: '' };
+          const colors = ['red', 'blue', 'green'];
+          const color = colors[waypoints.length % 3]; // Cycle through colors
+          const newWaypoint = { position: e.latlng, text: '', color };
           setWaypoints([...waypoints, newWaypoint]);
           setSelectedWaypoint(waypoints.length); // Select the newly added waypoint
         }
@@ -82,6 +87,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
           latitude: waypoint.position.lat,
           longitude: waypoint.position.lng,
           text: waypoint.text,
+          color: waypoint.color,
         }),
       });
       const savedWaypoint = await response.json();
@@ -89,6 +95,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
         prev.map((wp, i) => (i === index ? { ...wp, id: savedWaypoint.id } : wp))
       );
     }
+  };
+
+  const getIcon = (color: string) => {
+    if (color === 'red') return redIcon;
+    if (color === 'blue') return blueIcon;
+    return greenIcon;
   };
 
   return (
@@ -99,7 +111,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         {waypoints.map((waypoint, index) => (
-          <Marker key={index} position={waypoint.position}>
+          <Marker key={index} position={waypoint.position} icon={getIcon(waypoint.color)}>
             <Popup>
               <div>
                 {waypoint.text || 'No text added'}
