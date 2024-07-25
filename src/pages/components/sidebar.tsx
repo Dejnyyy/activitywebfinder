@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { CgAddR } from "react-icons/cg";
 import { IoIosNotifications } from "react-icons/io";
 import { FaMap, FaHome } from "react-icons/fa";
+import HomeComponent from './HomeComponent';
 
 // Dynamically import MapComponent to avoid SSR issues
 const MapComponent = dynamic(() => import('./MapComponent'), {
@@ -25,8 +26,8 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex">
-      <div className="w-16 fixed h-full left-0 bg-gray-900 shadow-lg flex flex-col items-center py-4">
+    <div className="flex h-full w-full">
+      <div className="sidebar w-16 fixed h-full left-0 bg-gray-900 shadow-lg flex flex-col items-center py-4">
         <div className="mb-6">
           <Image
             className="mx-auto"
@@ -73,9 +74,9 @@ const Sidebar: React.FC = () => {
       </div>
 
       <div className="ml-16 flex-grow">
-        {activeTab === 'home' && <div>Home Content</div>}
+        {activeTab === 'home' && <HomeComponent />}
         {activeTab === 'map' && <MapComponent addWaypointMode={false} />}
-        {activeTab === 'notifications' && <div>Notifications Content</div>}
+        {activeTab === 'notifications' && <div className=''>Notifications Content</div>}
         {activeTab === 'add' && <MapComponent addWaypointMode={true} />}
       </div>
     </div>

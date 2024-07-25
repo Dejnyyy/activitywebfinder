@@ -7,7 +7,7 @@ const HomeComponent: React.FC = () => {
       className="relative flex items-center justify-center h-screen bg-cover bg-center"
       style={{ backgroundImage: 'url(/background.jpg)' }}
     >
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="absolute inset-0 bg-black opacity-100"></div>
       <div className="relative z-10 text-center text-white">
         <Image
           src="/favicon.ico"

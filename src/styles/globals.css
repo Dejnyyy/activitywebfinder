@@ -2,16 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+
 .group:hover .group-hover\\:opacity-100 {
     opacity: 1;
   }
-  body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-  }.red-marker {
+  
+  .red-marker {
     filter: hue-rotate(0deg) saturate(3) brightness(0.9);
   }
   
