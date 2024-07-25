@@ -12,4 +12,5 @@ model Waypoint {
   latitude  Float
   longitude Float
   text      String
+  color     String
 }
