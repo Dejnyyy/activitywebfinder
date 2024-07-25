@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 const Home: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-grow container mx-auto p-4">
+      <main className="flex-grow container mx-auto">
         <Sidebar />
       </main>
       <Footer />
