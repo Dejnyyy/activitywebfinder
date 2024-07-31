@@ -66,7 +66,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
     setNewWaypointText(e.target.value);
   };
 
-  const handleTextSubmit = async (index: number) => {
+  const handleTextSubmit = async (index: number, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event propagation to the map
+
     const updatedWaypoints = waypoints.map((waypoint, i) =>
       i === index ? { ...waypoint, text: newWaypointText } : waypoint
     );
@@ -123,10 +125,12 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
                       onChange={handleTextChange}
                       className="w-full p-1 border border-gray-300 rounded-md"
                       placeholder="Enter text"
+                      onClick={(e) => e.stopPropagation()} // Prevent event propagation to the map
                     />
                     <button
-                      onClick={() => handleTextSubmit(index)}
+                      onClick={(e) => handleTextSubmit(index, e)}
                       className="mt-2 bg-blue-500 text-white p-1 rounded-md"
+                      onMouseDown={(e) => e.stopPropagation()} // Prevent event propagation to the map
                     >
                       Save
                     </button>
@@ -134,7 +138,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
                 )}
                 {selectedWaypoint !== index && (
                   <button
-                    onClick={() => setSelectedWaypoint(index)}
+                    onClick={(e) => { e.stopPropagation(); setSelectedWaypoint(index); }}
                     className="mt-2 bg-blue-500 text-white p-1 rounded-md"
                   >
                     Edit
