@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
@@ -102,7 +102,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
   };
 
   useEffect(() => {
-    // Initialize map
+    // Initialize the map
     const map = L.map('map').setView([50.0755, 14.4378], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -111,10 +111,10 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
 
     // Initialize the marker cluster group
     const markers = L.markerClusterGroup({
-      disableClusteringAtZoom: 16, // Prevent clustering at higher zoom levels
-      showCoverageOnHover: false, // No coverage overlay when hovering
+      disableClusteringAtZoom: 16, // Disable clustering at high zoom levels
     });
 
+    // Add markers to the cluster group
     waypoints.forEach((waypoint) => {
       const marker = L.marker(waypoint.position, {
         icon: getIcon(waypoint.color),
@@ -133,8 +133,15 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
 
   return (
     <div id="map" style={{ height: '100vh', width: '100%' }}>
-      {/* Cluster markers are now added in the useEffect above */}
-      {addWaypointMode && <AddWaypoint />}
+      <MapContainer center={[50.0755, 14.4378]} zoom={14} style={{ height: '100vh', width: '100%' }}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+
+        {/* AddWaypoint must be rendered within the MapContainer */}
+        {addWaypointMode && <AddWaypoint />}
+      </MapContainer>
     </div>
   );
 };
