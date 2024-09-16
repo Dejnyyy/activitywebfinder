@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import L from 'leaflet';
+import 'leaflet.markercluster';
 import { redIcon, blueIcon, greenIcon } from './CustomIcons';
-
-// Fix for the default icon issue
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 interface Waypoint {
   id?: number;
@@ -105,51 +101,40 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
     return greenIcon;
   };
 
+  useEffect(() => {
+    // Initialize map
+    const map = L.map('map').setView([50.0755, 14.4378], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // Initialize the marker cluster group
+    const markers = L.markerClusterGroup({
+      disableClusteringAtZoom: 16, // Prevent clustering at higher zoom levels
+      showCoverageOnHover: false, // No coverage overlay when hovering
+    });
+
+    waypoints.forEach((waypoint) => {
+      const marker = L.marker(waypoint.position, {
+        icon: getIcon(waypoint.color),
+      }).bindPopup(
+        `<div>${waypoint.text || 'No text added'}</div>`
+      );
+      markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    return () => {
+      map.remove();
+    };
+  }, [waypoints]);
+
   return (
-    <div className="relative">
-      <MapContainer center={[50.0755, 14.4378]} zoom={14} style={{ height: '100vh', width: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {waypoints.map((waypoint, index) => (
-          <Marker key={index} position={waypoint.position} icon={getIcon(waypoint.color)}>
-            <Popup>
-              <div>
-                {waypoint.text || 'No text added'}
-                {selectedWaypoint === index && (
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      value={newWaypointText}
-                      onChange={handleTextChange}
-                      className="w-full p-1 border border-gray-300 rounded-md"
-                      placeholder="Enter text"
-                      onClick={(e) => e.stopPropagation()} // Prevent event propagation to the map
-                    />
-                    <button
-                      onClick={(e) => handleTextSubmit(index, e)}
-                      className="mt-2 bg-blue-500 text-white p-1 rounded-md"
-                      onMouseDown={(e) => e.stopPropagation()} // Prevent event propagation to the map
-                    >
-                      Save
-                    </button>
-                  </div>
-                )}
-                {selectedWaypoint !== index && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setSelectedWaypoint(index); }}
-                    className="mt-2 bg-blue-500 text-white p-1 rounded-md"
-                  >
-                    Edit
-                  </button>
-                )}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-        {addWaypointMode && <AddWaypoint />}
-      </MapContainer>
+    <div id="map" style={{ height: '100vh', width: '100%' }}>
+      {/* Cluster markers are now added in the useEffect above */}
+      {addWaypointMode && <AddWaypoint />}
     </div>
   );
 };
