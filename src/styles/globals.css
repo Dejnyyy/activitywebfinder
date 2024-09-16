@@ -25,3 +25,21 @@ body {
     filter: hue-rotate(120deg) saturate(3) brightness(0.9);
   }
   
+  @keyframes text-fill {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .text-fill {
+    background: linear-gradient(270deg, #ffffff, #848484, #000000);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: text-fill 4s ease infinite;
+  }
+  
