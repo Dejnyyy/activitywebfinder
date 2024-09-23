@@ -116,7 +116,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
       i === index ? { ...waypoint, text: newText } : waypoint
     );
     setWaypoints(updatedWaypoints);
-
     // Save waypoint text to the database (assuming there's an API to handle this)
     const waypoint = updatedWaypoints[index];
     if (waypoint.id) {
