@@ -110,7 +110,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
     });
     return null;
   };
-
   const handleTextSubmit = (index: number, newText: string) => {
     const updatedWaypoints = waypoints.map((waypoint, i) =>
       i === index ? { ...waypoint, text: newText } : waypoint
