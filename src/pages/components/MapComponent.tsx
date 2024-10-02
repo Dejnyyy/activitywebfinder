@@ -127,7 +127,6 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
       }).catch((error) => console.error('Failed to update waypoint text:', error));
     }
   };
-
   const getIcon = (color: string) => {
     if (color === 'red') return redIcon;
     if (color === 'blue') return blueIcon;
