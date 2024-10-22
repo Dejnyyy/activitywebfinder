@@ -18,11 +18,7 @@ const Sidebar: React.FC = () => {
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    if (tab === 'add') {
-      setAddWaypointMode(true);
-    } else {
-      setAddWaypointMode(false);
-    }
+    setAddWaypointMode(tab === 'add'); // Only enable addWaypointMode when 'add' tab is active
   };
 
   return (
@@ -75,9 +71,8 @@ const Sidebar: React.FC = () => {
 
       <div className="ml-16 flex-grow">
         {activeTab === 'home' && <HomeComponent />}
-        {activeTab === 'map' && <MapComponent addWaypointMode={false} />}
+        {(activeTab === 'map' || activeTab === 'add') && <MapComponent addWaypointMode={addWaypointMode} />}
         {activeTab === 'notifications' && <div className=''>Notifications Content</div>}
-        {activeTab === 'add' && <MapComponent addWaypointMode={true} />}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
@@ -50,6 +50,46 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
     fetchWaypoints();
   }, []);
 
+  const handleTextSubmit = (index: number, newText: string) => {
+    const updatedWaypoints = waypoints.map((waypoint, i) =>
+      i === index ? { ...waypoint, text: newText } : waypoint
+    );
+    setWaypoints(updatedWaypoints);
+
+    // Save waypoint text to the database (assuming there's an API to handle this)
+    const waypoint = updatedWaypoints[index];
+    if (waypoint.id) {
+      fetch(`/api/waypoints/${waypoint.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: newText }),
+      }).catch((error) => console.error('Failed to update waypoint text:', error));
+    }
+  };
+
+  const AddWaypoint = () => {
+    useMapEvents({
+      click(e) {
+        if (addWaypointMode) {
+          const colors = ['red', 'blue', 'green'];
+          const color = colors[waypoints.length % 3]; // Cycle through colors
+          const newWaypoint = { position: e.latlng, text: '', color };
+          setWaypoints([...waypoints, newWaypoint]);
+          setSelectedWaypointIndex(waypoints.length); // Select the newly added waypoint
+        }
+      },
+    });
+    return null;
+  };
+
+  const getIcon = (color: string) => {
+    if (color === 'red') return redIcon;
+    if (color === 'blue') return blueIcon;
+    return greenIcon;
+  };
+
   useEffect(() => {
     const map = L.map('map').setView([50.0755, 14.4378], 14);
 
@@ -81,57 +121,16 @@ const MapComponent: React.FC<MapComponentProps> = ({ addWaypointMode }) => {
           }
           marker.closePopup();
         });
-
         return popupDiv;
       });
-
       markerClusterGroup.addLayer(marker);
     });
-
     // Add the marker cluster group to the map
     map.addLayer(markerClusterGroup);
-
     return () => {
       map.remove();
     };
   }, [waypoints]);
-
-  const AddWaypoint = () => {
-    useMapEvents({
-      click(e) {
-        if (addWaypointMode) {
-          const colors = ['red', 'blue', 'green'];
-          const color = colors[waypoints.length % 3]; // Cycle through colors
-          const newWaypoint = { position: e.latlng, text: '', color };
-          setWaypoints([...waypoints, newWaypoint]);
-          setSelectedWaypointIndex(waypoints.length); // Select the newly added waypoint
-        }
-      },
-    });
-    return null;
-  };
-  const handleTextSubmit = (index: number, newText: string) => {
-    const updatedWaypoints = waypoints.map((waypoint, i) =>
-      i === index ? { ...waypoint, text: newText } : waypoint
-    );
-    setWaypoints(updatedWaypoints);
-    // Save waypoint text to the database (assuming there's an API to handle this)
-    const waypoint = updatedWaypoints[index];
-    if (waypoint.id) {
-      fetch(`/api/waypoints/${waypoint.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: newText }),
-      }).catch((error) => console.error('Failed to update waypoint text:', error));
-    }
-  };
-  const getIcon = (color: string) => {
-    if (color === 'red') return redIcon;
-    if (color === 'blue') return blueIcon;
-    return greenIcon;
-  };
 
   return (
     <div className="relative">
